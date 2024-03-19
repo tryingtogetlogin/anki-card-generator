@@ -1,0 +1,56 @@
+llm:
+  model: gpt-3.5-turbo-0125
+  prompt_template: |
+    Given German word along with part of speach in english enclosed in triple quotes.
+    '''${german_word} ${part_of_speech}'''
+    
+    Evaluate the following variables (variable started with '$$' sign):
+    ${fields_description}
+    
+    If part of speech provided is not correct, use the correct one for variables evaluation.
+    
+    Substituted the evaluated variables values into the following template enclosed in triple quotes:
+    '''${fields_json_template}'''
+    
+    For example:
+    ${examples}
+    
+    Output valid JSON only
+anki:
+  deck: "Deck"
+  model: "Model"
+  fields:
+    - name: german
+      description: > 
+        German word. Noun should be preceded by their definite article (der, die, or das) and verbs 
+        should be in the infinitive.
+        Examples: "der Hund", "die Maus", "sprechen", "sich wundern", "abfahren", "rot"
+      example: "der Hund"
+    - name: info
+      description: >
+        Additional forms/information, usually only relevant for nouns and verbs.
+      example: "die Hunde"
+    - name: translation
+      description: >
+        Translation to English
+        Examples: "dog", "to speak", "to wonder", "to depart", "red"
+      example: "Dog"
+    - name: example
+      description: >
+        Example sentence with the word in German
+      example: "Der Hund ist Schwarz"
+  examples:
+    - input: "hund noun"
+      output: "{'german': 'der Hund', 'info': 'die Hunde', 'translation': 'dog', 'example': 'Der Hund ist Schwarz'}"
+    - input: "sprechen verb"
+      output: "{'german': 'sprechen', 'info': 'spricht, sprach, hat gesprochen', 'translation': 'to speak', 'example': 'Ich spreche Deutsch'}"
+    - input: "sich wundern verb"
+      output: "{'german': 'sich wundern', 'info': 'wundert sich, wunderte sich, hat sich gewundert', 'translation': 'to wonder', 'example': 'Ich wundere mich'}"
+    - input: "abfahren verb"
+      output: "{'german': 'abfahren', 'info': 'fährt ab, fuhr ab, ist abgefahren', 'translation': 'to depart', 'example': 'Der Zug fährt ab'}"
+    - input: "rot adjective"
+      output: "{'german': 'rot', 'info': '', 'translation': 'red', 'example': 'Die Rose ist rot'}"
+    - input: "geschieden adjective"
+      output: "{'german': 'geschieden', 'info': '', 'translation': 'divorced', 'example': 'Meine Eltern sind geschieden'}"
+
+  connect_url: "http://localhost:8765"
